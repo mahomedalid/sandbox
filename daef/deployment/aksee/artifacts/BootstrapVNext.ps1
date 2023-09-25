@@ -248,6 +248,8 @@ if (!(Test-Path -Path "$workDir")) {
     Expand-Archive -Path $installDir\$zipFile -DestinationPath "$installDir" -Force
 }
 
+Exit 1
+
 $aidejson = (Get-ChildItem -Path "$workDir" -Filter aide-userconfig.json -Recurse).FullName
 Set-Content -Path $aidejson -Value $aideuserConfig -Force
 $aksedgejson = (Get-ChildItem -Path "$workDir" -Filter aksedge-config.json -Recurse).FullName
