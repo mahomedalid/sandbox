@@ -97,7 +97,7 @@
             "metadata": {
                 "description": "Target GitHub account"
             },
-            "defaultValue": "microsoft"
+            "defaultValue": "mahomedalid"
         },
         "githubBranch": {
             "type": "string",
@@ -142,7 +142,7 @@
         }
     },
     "variables": {
-        "templateBaseUrl": "[concat('https://raw.githubusercontent.com/', parameters('githubAccount'), '/azure_arc/', parameters('githubBranch'), '/azure_arc_k8s_jumpstart/aks_hybrid/aks_edge_essentials_single/arm_template/')]",
+        "templateBaseUrl": "[concat('https://raw.githubusercontent.com/', parameters('githubAccount'), '/sandbox/', parameters('githubBranch'), '/daef/deployment/aksee/')]",
         "vmName": "[concat(parameters('vmName'))]",
         "publicIpAddressName": "[concat(parameters('vmName'), '-PIP' )]",
         "networkInterfaceName": "[concat(parameters('vmName'),'-NIC')]",
@@ -320,9 +320,9 @@
                 "autoUpgradeMinorVersion": true,
                 "protectedSettings": {
                     "fileUris": [
-                        "[uri(variables('templateBaseUrl'), concat('artifacts/Bootstrap.ps1'))]"
+                        "[uri(variables('templateBaseUrl'), concat('artifacts/BootstrapVNext.ps1'))]"
                     ],
-                    "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File Bootstrap.ps1', ' -adminUsername ', parameters('adminUsername'), ' -appId ', parameters('appId'), ' -password ', parameters('password'), ' -tenantId ', parameters('tenantId'), ' -subscriptionId ', subscription().subscriptionId, ' -resourceGroup ', resourceGroup().name, ' -location ', resourceGroup().location, ' -kubernetesDistribution ', parameters('kubernetesDistribution'), ' -windowsNode ', parameters('windowsNode'), ' -templateBaseUrl ', variables('templateBaseUrl'))]"
+                    "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File BootstrapVNext.ps1', ' -adminUsername ', parameters('adminUsername'), ' -appId ', parameters('appId'), ' -password ', parameters('password'), ' -tenantId ', parameters('tenantId'), ' -subscriptionId ', subscription().subscriptionId, ' -resourceGroup ', resourceGroup().name, ' -location ', resourceGroup().location, ' -kubernetesDistribution ', parameters('kubernetesDistribution'), ' -windowsNode ', parameters('windowsNode'), ' -templateBaseUrl ', variables('templateBaseUrl'))]"
                 }
             }
         },
