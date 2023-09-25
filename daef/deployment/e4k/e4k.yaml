@@ -1,0 +1,57 @@
+---
+apiVersion: az-edge.com/v1alpha3
+kind: Broker
+metadata:
+  name: "my-broker"
+  namespace: default
+spec:
+  authImage:
+    pullPolicy: Always
+    repository: alicesprings.azurecr.io/dmqtt-authentication
+    tag: 0.5.1
+  brokerImage:
+    pullPolicy: Always
+    repository: alicesprings.azurecr.io/dmqtt-pod
+    tag: 0.5.1
+  healthManagerImage:
+    pullPolicy: Always
+    repository: alicesprings.azurecr.io/dmqtt-operator
+    tag: 0.5.1
+  mode: distributed
+  cardinality:
+    frontend:
+      replicas: 2
+    backendChain:
+      replicas: 1
+      partitions: 2
+      workers: 1
+  diagnostics:
+    probeImage: alicesprings.azurecr.io/diagnostics-probe:0.5.1
+    diagnosticServiceEndpoint: azedge-diagnostics-service:9700
+    enableMetrics: true
+    enableTracing: true
+    logLevel: info,hyper=off,kube_client=off,tower=off,conhash=off,h2=off
+    enableSelfCheck: true
+---
+apiVersion: az-edge.com/v1alpha3
+kind: BrokerListener
+metadata:
+  name: "az-mqtt-non-tls-listener"
+  namespace: default
+spec:
+  brokerRef: "my-broker"
+  authenticationEnabled: false
+  authorizationEnabled: false
+  port: 1883
+---
+apiVersion: az-edge.com/v1alpha3
+kind: DiagnosticService
+metadata:
+  name: azedge-diagnostics-service
+  namespace: default
+spec:
+  image:
+    pullPolicy: Always
+    repository: alicesprings.azurecr.io/diagnostics-service
+    tag: 0.5.1
+  logFormat: "text"

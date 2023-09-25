@@ -1,0 +1,23 @@
+kafka:
+  # Port 9093 is Event Hub's Kakfa endpoint
+  endpoint: <NAMESPACE>.servicebus.windows.net:9093
+  # Kafka consumer group id prefix
+  # Unique for every route that sinks from Kafka to E4K
+  group_id_prefix: e4kconnector
+  # Interval to commit consumer reading offset position to Kafka broker
+  auto_commit_interval_ms: 5000
+  listener:
+    # Event Hub uses SSL
+    type: ssl
+    # Event Hub uses SASL PLAIN authentication for its Kafka-compatible endpoint
+    sasl:
+      sasl_type: plain
+      secret_name: eh-secret
+topicMap:
+  configYaml:
+    route:
+      # Pull from MQTT topic and push to Kafka topic/Eventhub instance telemetry
+      # Default partition 0 only
+      - kafka: telemetry
+        mqtt: opcua/data/opc-ua-connector/opc-ua-connector/thermostat-sample
+        sink_to: kafka
