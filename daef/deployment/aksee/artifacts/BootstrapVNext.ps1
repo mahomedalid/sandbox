@@ -74,6 +74,7 @@ ClientTools_01 | Format-Table
 
 # Enable VirtualMachinePlatform feature, the vm reboot will be done in DSC extension
 Enable-WindowsOptionalFeature -Online -FeatureName VirtualMachinePlatform -NoRestart
+Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All -NoRestart
 
 # Disable Microsoft Edge sidebar
 $RegistryPath = 'HKLM:\SOFTWARE\Policies\Microsoft\Edge'
@@ -256,8 +257,13 @@ $aksedgeShell = (Get-ChildItem -Path "$workDir" -Filter AksEdgeShell.ps1 -Recurs
 
 # Download, install and deploy AKS EE 
 Write-Host "Step 2: Download, install and deploy AKS Edge Essentials"
+
+Write-Host "Start-AideWorkflow $aidejson"
 # invoke the workflow, the json file already stored above.
 $retval = Start-AideWorkflow -jsonFile $aidejson
+
+Write-Host "End of StartAideWorkflow"
+
 # report error via Write-Error for Intune to show proper status
 if ($retval) {
     Write-Host "Deployment Successful. "
@@ -267,6 +273,8 @@ if ($retval) {
     Pop-Location
     exit -1
 }
+
+Write-Host "Get a list of all nodes in cluster"
 
 if ($env:windowsNode -eq $true) {
     # Get a list of all nodes in the cluster
